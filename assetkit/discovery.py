@@ -3,7 +3,10 @@ from assetkit.asset_manager import AssetManager
 
 def discover_asset_managers(group="assetkit.assets") -> dict:
     managers = {}
-    for ep in entry_points().get(group, []):
+    eps = entry_points()
+    selected = eps.select(group=group) if hasattr(eps, "select") else eps.get(group, [])
+
+    for ep in selected:
         pkg_name = ep.name
         mod = ep.value
         try:

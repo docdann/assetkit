@@ -1,7 +1,20 @@
-*.pyc
+# Bytecode
 __pycache__/
+*.py[cod]
+
+# Build artifacts
 build/
 dist/
 *.egg-info/
-.env
-.venv
+
+# Editors
+.vscode/
+.idea/
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Pyenv
+.python-version
