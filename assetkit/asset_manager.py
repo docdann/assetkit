@@ -1,3 +1,4 @@
+
 from importlib.resources import files
 import os
 from typing import Dict, List
@@ -30,7 +31,7 @@ class AssetManager:
 
         def walk(path_obj, prefix=""):
             for item in path_obj.iterdir():
-                rel = os.path.join(prefix, item.name)
+                rel = os.path.join(prefix, item.name).replace('\\', '/')  # Normalize separators
                 if item.is_dir():
                     walk(item, rel)
                 else:

@@ -8,4 +8,9 @@ def build_model():
     config_path = assets["config/model.yaml"].path()
     with open(config_path) as f:
         config = yaml.safe_load(f)
-    return LogisticRegression(**config.get("model", {}))
+
+    model_params = config.get("model", {})
+    if not isinstance(model_params, dict):
+        model_params = {}
+
+    return LogisticRegression(**model_params)
