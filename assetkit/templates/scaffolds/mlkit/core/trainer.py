@@ -16,7 +16,9 @@ def train():
     model = build_model()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    print("[{{PROJECT_NAME}}] Accuracy:", accuracy_score(y_test, y_pred))
+    score = accuracy_score(y_test, y_pred)
+    print(f"[{{PROJECT_NAME}}] Accuracy: {score:.4f}")
     model_path = Path(assets._base) / "models" / "pretrained.pkl"
     model_path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, model_path)
+    print(f"[{{PROJECT_NAME}}] Model saved to: {model_path}")
