@@ -1,0 +1,22 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir assetkit
+
+WORKDIR /app
+
+# Step 1: Create a new asset package
+RUN assetkit new my_assets
+
+# Step 2: Ensure assets directory exists and add a test file
+RUN git clone https://github.com/octocat/Hello-World.git /app/my_assets/my_assets/resources/assets/github_repo
+
+# Step 3: Show files at build time (debugging)
+RUN ls -R /app/my_assets/my_assets/resources/assets
+
+# Step 4: Install package
+WORKDIR /app/my_assets
+RUN pip install --no-cache-dir .
+
+# Step 5: Show assets at runtime
+CMD ["python", "-c", "from assetkit import AssetManager;assets = AssetManager(package_root='my_assets', resource_dir='resources/assets');print('Assets at runtime:', assets.list())"]
