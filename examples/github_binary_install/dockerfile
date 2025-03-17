@@ -1,0 +1,25 @@
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y git curl tar && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir assetkit
+
+WORKDIR /app
+
+# Step 1: Scaffold asset package
+RUN assetkit new my_assets
+
+# Step 2: Download bat binary and extract to resource assets
+RUN mkdir -p /app/my_assets/my_assets/resources/assets/bat_bin \
+    && curl -L https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-v0.24.0-x86_64-unknown-linux-gnu.tar.gz -o bat.tar.gz \
+    && tar -xzf bat.tar.gz -C /app/my_assets/my_assets/resources/assets/bat_bin --strip-components=1 \
+    && rm bat.tar.gz
+
+# Step 3: Show contents
+RUN ls -R /app/my_assets/my_assets/resources/assets/bat_bin
+
+# Step 4: Install asset package
+WORKDIR /app/my_assets
+RUN pip install --no-cache-dir .
+
+# Step 5: Runtime test - locate and execute bat binary
+CMD ["python", "-c", "from assetkit import AssetManager;import subprocess;assets = AssetManager(package_root='my_assets', resource_dir='resources/assets');bat_path = assets['bat_bin/bat'].path();print('Running bat from asset package:');subprocess.run([bat_path, '--version'])"]
