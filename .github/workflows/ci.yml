@@ -3,9 +3,9 @@ name: 🧪 CI & 📦 Publish to PyPI
 on:
   push:
     branches:
-      - main
+      - '**'  # Run CI on all branches
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*'  # Publish only on version tags
   pull_request:
   workflow_dispatch:
 
