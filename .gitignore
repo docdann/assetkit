@@ -1,4 +1,4 @@
-# Bytecode
+# Python bytecode
 __pycache__/
 *.py[cod]
 
@@ -7,7 +7,7 @@ build/
 dist/
 *.egg-info/
 
-# Editors
+# Editor settings
 .vscode/
 .idea/
 
@@ -18,3 +18,36 @@ venv/
 
 # Pyenv
 .python-version
+
+# Test artifacts
+*.log
+*.tmp
+*.bak
+.pytest_cache/
+coverage/
+htmlcov/
+
+# Test-generated projects and scaffolds
+test_assets/
+my_ml_app/
+binary_app/
+ghost_app/
+
+# Unit test dummy scaffold templates
+assetkit/templates/scaffolds/mlkit/
+assetkit/templates/scaffolds/mlkit_binary/
+assetkit/templates/scaffolds/nonexistent/
+
+# Coverage reports and test outputs
+coverage.xml
+.cache/
+.tox/
+.nox/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# AssetKit scaffold-generated asset packages
+my_assets/
+test_assets_package/

@@ -32,7 +32,7 @@ def create_new_project(args):
     old_package_dir = target_path / "your_package_name"
     new_package_dir = target_path / project_name
     if old_package_dir.exists():
-        print(f"[AssetKit DEBUG] Renaming {old_package_dir} → {new_package_dir}")
+        print(f"[AssetKit DEBUG] Renaming {old_package_dir} -> {new_package_dir}")
         old_package_dir.rename(new_package_dir)
 
     # Replace placeholders like {{PROJECT_NAME}} in all files
