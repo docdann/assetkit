@@ -1,4 +1,4 @@
-# AssetKit
+# 📦 AssetKit
 
 > A Python toolkit for packaging, discovering, and loading structured runtime assets.
 
@@ -10,10 +10,15 @@
 ---
 
 ## 🚀 Features
-- Structured asset packaging with a clean `resources/` convention
-- Auto-discovery of asset packages via `entry_points`
-- Pythonic runtime asset access with `AssetManager`
-- CLI scaffolding to create new asset packages
+
+- ✅ Structured asset packaging with a clean `resources/assets/` convention  
+- ✅ `AssetManager`: Pythonic runtime asset access interface  
+- ✅ CLI scaffolding for creating reusable asset packages and app templates  
+- ✅ Optional asset injection at creation (`--add <files/dirs>`)  
+- ✅ Optional install-after-generation (`--install`)  
+- ✅ Auto-discovery of installed asset packages via `entry_points`  
+- ✅ Fully pip-installable asset bundles — no runtime source directory needed  
+- ✅ Works with plain files, binaries, or entire GitHub repositories
 
 ---
 
@@ -23,65 +28,116 @@
 pip install assetkit
 ```
 
+During development:
+```bash
+pip install -e .
+```
+
 ---
 
-## ⚡ Quick Example
+## 🛠 CLI Usage
+
+### Create a new asset package:
+
+```bash
+assetkit new my_assets
+```
+
+With additional asset files or folders injected at creation time:
+
+```bash
+assetkit new my_assets --add /path/to/data.csv /path/to/config/
+```
+
+Auto-install the package after creation:
+
+```bash
+assetkit new my_assets --install
+```
+
+### Scaffold an AI/ML application project:
+
+```bash
+assetkit scaffold mlkit my_app_project
+```
+
+---
+
+## 📂 Example Asset Package Structure
+
+```
+my_assets/
+├── pyproject.toml
+├── setup.cfg
+├── MANIFEST.in
+└── my_assets/
+    ├── __init__.py
+    └── resources/
+        └── assets/
+            ├── config/
+            │   └── model.yaml
+            ├── data/
+            │   └── sample.csv
+            └── github_repo/
+                └── ...
+```
+
+---
+
+## ⚡ Quick Python Usage Example
 
 ```python
 from assetkit.asset_manager import AssetManager
 
-assets = AssetManager(package_root="your_package", resource_dir="resources")
-print(assets.list())
-print(assets["config/main.yaml"].text())
+assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
+print(assets.list())  # List available assets
+print(assets["config/model.yaml"].text())  # Read asset file
 ```
 
-To discover multiple asset packages dynamically:
+## 🔍 Discover All Installed Asset Packages
 
 ```python
 from assetkit.discovery import discover_asset_managers
 
 packages = discover_asset_managers()
 for name, assets in packages.items():
-    print(name, assets.list())
+    print(f"{name}: {assets.list()}")
 ```
 
 ---
 
-## 🛠 Scaffolding a New Package
+## 🧪 Testing an Installed Asset Package
+
+After creating and installing:
 
 ```bash
-assetkit new myplugin
+cd my_assets
+pip install .
 ```
 
-This creates a new Python package with an embedded `resources/` directory and a sample `main.py`.
-
----
-
-## 📂 Project Structure Example
-
-```
-myplugin/
-├── pyproject.toml
-├── main.py
-└── myplugin/
-    ├── __init__.py
-    └── resources/
-        ├── config/
-        │   └── main.yaml
-        └── images/
-            └── test.jpg
-```
-
----
-
-## 🧪 Testing Asset Packages
-
-After installing a package (`pip install ./myplugin`):
+Then test in Python:
 
 ```python
-from assetkit.discovery import discover_asset_managers
-assets = discover_asset_managers()["myplugin"]
+from assetkit import AssetManager
+assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
 print(assets.list())
+```
+
+---
+
+## 🐳 Dockerized Example (Optional)
+
+You can build reproducible asset packages in Docker:
+
+```dockerfile
+FROM python:3.12-slim
+RUN pip install assetkit
+WORKDIR /app
+RUN assetkit new my_assets
+RUN mkdir -p /app/my_assets/my_assets/resources/assets && echo "Hello" > /app/my_assets/my_assets/resources/assets/hello.txt
+WORKDIR /app/my_assets
+RUN pip install .
+CMD ["python", "-c", "from assetkit import AssetManager; assets = AssetManager(package_root='my_assets', resource_dir='resources/assets'); print(assets.list())"]
 ```
 
 ---
@@ -96,3 +152,12 @@ MIT — See [LICENSE](LICENSE)
 
 - [GitHub Repository](https://github.com/docdann/assetkit)
 - [PyPI Project Page](https://pypi.org/project/assetkit/)
+
+---
+
+## 🏁 Coming Soon (Roadmap)
+
+- `assetkit bundle` and `assetkit extract` CLI tools  
+- YAML and pandas extensions (`assetkit.ext.*`)  
+- Language-agnostic manifest support via `assetkit.yaml`  
+- Cross-platform asset publishing and usage
