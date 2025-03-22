@@ -24,6 +24,6 @@ def test_assetkit_functionality():
     assert "Name of the new asset package project" in result.stdout, f"Unexpected output: {result.stdout}"
 
 def test_container_runtime():
-    result = subprocess.run(['docker', 'run', '--rm', '-it', 'assetkit-test', 'bash', '-c', 'echo "Container is running!"'], capture_output=True, text=True)
+    result = subprocess.run(['docker', 'run', '--rm', 'assetkit-test', 'bash', '-c', 'echo "Container is running!"'], capture_output=True, text=True)
     assert result.returncode == 0, f"Container runtime failed: {result.stderr}"
     assert "Container is running!" in result.stdout, f"Unexpected output: {result.stdout}"
