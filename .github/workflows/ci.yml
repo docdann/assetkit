@@ -13,6 +13,9 @@ jobs:
   test:
     name: 🧪 Run Tests and Coverage
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Needed to read repository contents
+      id-token: write  # Required for Docker authorization (if interacting with external registries)
 
     steps:
       - name: 📥 Checkout repository
@@ -62,6 +65,9 @@ jobs:
     needs: test
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Needed to read repository contents
+      id-token: write  # Required for Docker authorization (if interacting with external registries)
 
     steps:
       - name: 📥 Checkout repository
