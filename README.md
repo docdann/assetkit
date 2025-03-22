@@ -4,6 +4,8 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/assetkit)](https://pypi.org/project/assetkit/)
 [![License](https://img.shields.io/pypi/l/assetkit)](https://github.com/docdann/assetkit/blob/main/LICENSE)
+[![CI](https://github.com/docdann/assetkit/actions/workflows/ci.yml/badge.svg)](https://github.com/docdann/assetkit/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/docdann/assetkit/branch/main/graph/badge.svg)](https://codecov.io/gh/docdann/assetkit)
 
 ---
 
