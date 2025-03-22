@@ -15,7 +15,7 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | t
     && apt-get install gh -y
 
 # Install AssetKit
-RUN pip install --no-cache-dir assetkit==0.1.11
+RUN pip install --no-cache-dir assetkit==0.1.13
 
 WORKDIR /app
 
