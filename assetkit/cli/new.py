@@ -100,13 +100,13 @@ def create_new_project(args):
 
     # ✅ Generate assets.py after assets are copied
     if gen_assets_py_flag:
-        output_path = new_package_dir / "assets.py"
+        output_path = (new_package_dir / "assets.py").resolve()  # ✅ ensure absolute resolved path
         print(f"[AssetKit DEBUG] Generating Python asset mapping file at {output_path}")
         try:
             generate_asset_mapping(
                 package_name=project_name,
                 resource_dir="resources/assets",
-                output_filename=output_path
+                output_filename=str(output_path)  # ✅ ensure correct string path
             )
             print(f"[AssetKit] Generated assets.py successfully.")
         except Exception as e:
