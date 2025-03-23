@@ -1,5 +1,3 @@
-# assetkit/internal/generators/generate_asset_map.py
-
 from pathlib import Path
 from importlib.resources import files
 from assetkit.asset_manager import AssetManager
@@ -47,7 +45,8 @@ def generate_asset_mapping(package_name: str, resource_dir: str = "resources/ass
         f"assets = AssetsProxy(_assets)\n"
     )
 
-    # Write to file
-    output_path = Path(output_filename)
+    # Ensure output path is absolute and resolved correctly
+    output_path = Path(output_filename).resolve()
     output_path.write_text(content.strip() + "\n", encoding="utf-8")
-    print(f"[AssetKit] ✅ Generated asset mapping file: {output_path.resolve()}")
+
+    print(f"[AssetKit] ✅ Generated asset mapping file: {output_path}")
