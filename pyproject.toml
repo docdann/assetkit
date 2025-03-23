@@ -20,3 +20,8 @@ assetkit = ["resources/**/*"]
 
 [tool.setuptools.packages.find]
 include = ["assetkit*"]
+
+[tool.coverage.report]
+omit = [
+    "*/assets.py",
+]
