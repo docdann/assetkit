@@ -13,12 +13,14 @@
 
 - ✅ Structured asset packaging with a clean `resources/assets/` convention  
 - ✅ `AssetManager`: Pythonic runtime asset access interface  
-- ✅ CLI scaffolding for creating reusable asset packages and app templates  
+- ✅ Optional `assets.py` auto-generated mapping with dot-access convenience  
+- ✅ CLI scaffolding for reusable asset packages and app templates  
 - ✅ Optional asset injection at creation (`--add <files/dirs>`)  
-- ✅ Optional install-after-generation (`--install`)  
+- ✅ Optional `--install` after generation  
+- ✅ Optional `--gen-assets-py` to include reusable `assets.py` for import  
 - ✅ Auto-discovery of installed asset packages via `entry_points`  
-- ✅ Fully pip-installable asset bundles — no runtime source directory needed  
-- ✅ Works with plain files, binaries, or entire GitHub repositories
+- ✅ Fully pip-installable — no source directory needed at runtime  
+- ✅ Supports plain files, binaries, even GitHub repositories  
 
 ---
 
@@ -43,7 +45,7 @@ pip install -e .
 assetkit new my_assets
 ```
 
-With additional asset files or folders injected at creation time:
+Add asset files or folders at creation time:
 
 ```bash
 assetkit new my_assets --add /path/to/data.csv /path/to/config/
@@ -53,6 +55,18 @@ Auto-install the package after creation:
 
 ```bash
 assetkit new my_assets --install
+```
+
+Also generate reusable `assets.py` mapping file:
+
+```bash
+assetkit new my_assets --gen-assets-py
+```
+
+Put it all together
+
+```bash
+assetkit new my_assets --add myfile.txt --gen-assets-py --install
 ```
 
 ### Scaffold an AI/ML application project:
@@ -72,27 +86,40 @@ my_assets/
 ├── MANIFEST.in
 └── my_assets/
     ├── __init__.py
+    ├── assets.py              <-- optional, auto-generated
     └── resources/
         └── assets/
             ├── config/
             │   └── model.yaml
             ├── data/
             │   └── sample.csv
-            └── github_repo/
-                └── ...
+            └── myfile.txt
 ```
 
 ---
 
 ## ⚡ Quick Python Usage Example
 
+### Manual access via `AssetManager`:
 ```python
 from assetkit.asset_manager import AssetManager
 
 assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
-print(assets.list())  # List available assets
-print(assets["config/model.yaml"].text())  # Read asset file
+print(assets.list())  # List all available assets
+print(assets["config/model.yaml"].text())  # Read file contents
 ```
+
+### Auto-importable mapping via `assets.py` (if generated):
+
+```python
+from my_assets.assets import assets
+
+print(assets.config_model_yaml.text())
+print(assets.data_sample_csv.text())
+print(assets.myfile_txt.path())  # Full file path
+```
+
+---
 
 ## 🔍 Discover All Installed Asset Packages
 
@@ -109,7 +136,6 @@ for name, assets in packages.items():
 ## 🧪 Testing an Installed Asset Package
 
 After creating and installing:
-
 ```bash
 cd my_assets
 pip install .
@@ -117,6 +143,12 @@ pip install .
 
 Then test in Python:
 
+```python
+from my_assets.assets import assets
+print(assets.config_model_yaml.text())
+```
+
+Or with raw `AssetManager` if no assets.py:
 ```python
 from assetkit import AssetManager
 assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
@@ -127,17 +159,18 @@ print(assets.list())
 
 ## 🐳 Dockerized Example (Optional)
 
-You can build reproducible asset packages in Docker:
-
 ```dockerfile
 FROM python:3.12-slim
+
 RUN pip install assetkit
+
 WORKDIR /app
-RUN assetkit new my_assets
-RUN mkdir -p /app/my_assets/my_assets/resources/assets && echo "Hello" > /app/my_assets/my_assets/resources/assets/hello.txt
+RUN assetkit new my_assets --add /dev/null --gen-assets-py
+
 WORKDIR /app/my_assets
 RUN pip install .
-CMD ["python", "-c", "from assetkit import AssetManager; assets = AssetManager(package_root='my_assets', resource_dir='resources/assets'); print(assets.list())"]
+
+CMD ["python", "-c", "from my_assets.assets import assets; print(assets.myfile_txt.text())"]
 ```
 
 ---
@@ -155,9 +188,11 @@ MIT — See [LICENSE](LICENSE)
 
 ---
 
-## 🏁 Coming Soon (Roadmap)
+## 🏁 Roadmap (Coming Soon)
 
-- `assetkit bundle` and `assetkit extract` CLI tools  
-- YAML and pandas extensions (`assetkit.ext.*`)  
-- Language-agnostic manifest support via `assetkit.yaml`  
-- Cross-platform asset publishing and usage
+- `assetkit bundle` and `assetkit extract` CLI tooling  
+- Language-agnostic `assetkit.yaml` asset manifests  
+- `assetkit.ext.yaml`, `assetkit.ext.pandas` helpers  
+- CLI dispatch of packaged binary tools (`assetkit run <tool>`)  
+- GitHub Actions publishing workflows  
+- Plugin-style extension system for asset loaders
