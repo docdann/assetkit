@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Union
+from importlib.resources import files as pkg_files
 
 
 class AssetFile:
@@ -21,22 +22,35 @@ class AssetFile:
 
 
 class AssetManager:
-    def __init__(self, package_root: Path, resource_dir: str = "resources"):
+    def __init__(self, package_root: Union[str, Path], resource_dir: str = "resources/assets"):
         """
-        :param package_root: Path to the root of the installed package (directory containing resources/)
-        :param resource_dir: Relative path inside the package where assets are located
+        Initialize asset manager.
+
+        :param package_root: A package name (str) OR filesystem path (Path or str)
+        :param resource_dir: Relative resource path (default: "resources/assets")
         """
-        self._base = Path(package_root).resolve() / resource_dir
-        if not self._base.exists():
-            raise FileNotFoundError(f"AssetManager: Resource directory not found: {self._base}")
+        if isinstance(package_root, (str, Path)) and Path(package_root).exists():
+            # Filesystem path mode
+            self._base = Path(package_root).resolve() / resource_dir
+            if not self._base.exists():
+                raise FileNotFoundError(f"AssetManager: Resource directory not found at path: {self._base}")
+        else:
+            # Installed package mode
+            try:
+                self._base = pkg_files(package_root) / resource_dir
+            except ModuleNotFoundError:
+                raise RuntimeError(f"AssetManager: Package '{package_root}' is not installed or discoverable")
+            if not self._base.exists():
+                raise FileNotFoundError(f"AssetManager: Resource directory not found in package: {self._base}")
+
         self._index = self._build_index()
 
     def _build_index(self) -> Dict[str, AssetFile]:
         index = {}
 
-        def walk(path_obj: Path, prefix=""):
+        def walk(path_obj, prefix=""):
             for item in path_obj.iterdir():
-                rel = os.path.join(prefix, item.name).replace("\\", "/")  # Normalize for consistency
+                rel = os.path.join(prefix, item.name).replace("\\", "/")
                 if item.is_dir():
                     walk(item, rel)
                 else:

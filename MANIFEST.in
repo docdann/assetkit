@@ -1,1 +1,2 @@
-recursive-include assetkit *
+recursive-include {{PROJECT_NAME}}/resources/assets *
+include {{PROJECT_NAME}}/assets.py

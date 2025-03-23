@@ -27,6 +27,12 @@ def register_new_command(subparsers):
         action="store_true",
         help="Generate a reusable Python asset mapping file (assets.py)"
     )
+    parser.add_argument(
+        "--target-dir",
+        type=str,
+        default=".",
+        help="Target output directory (default: current directory)"
+    )
     parser.set_defaults(func=create_new_project)
 
 
@@ -36,7 +42,9 @@ def create_new_project(args):
     install_flag = args.install
     gen_assets_py_flag = getattr(args, "gen_assets_py", False)
 
-    target_path = Path.cwd() / project_name
+    target_dir = Path(args.target_dir).resolve()
+    target_path = target_dir / project_name
+    new_package_dir = target_path / project_name
 
     if target_path.exists():
         print(f"[AssetKit] Directory '{project_name}' already exists.")
@@ -50,8 +58,8 @@ def create_new_project(args):
     for path in target_path.rglob("*"):
         print("  -", path.relative_to(target_path))
 
+    # Rename inner package folder
     old_package_dir = target_path / "your_package_name"
-    new_package_dir = target_path / project_name
     if old_package_dir.exists():
         print(f"[AssetKit DEBUG] Renaming {old_package_dir} -> {new_package_dir}")
         old_package_dir.rename(new_package_dir)
@@ -67,7 +75,7 @@ def create_new_project(args):
                 print(f"[AssetKit DEBUG] Skipped binary file: {path}")
                 continue
 
-    # Copy assets before mapping and install
+    # Copy additional assets
     asset_target_dir = new_package_dir / "resources" / "assets"
     asset_target_dir.mkdir(parents=True, exist_ok=True)
     copied_assets = []
@@ -89,7 +97,7 @@ def create_new_project(args):
                 copied_assets.append(dest_dir)
                 print(f"[AssetKit DEBUG] Added directory asset: {src_path} -> {dest_dir}")
 
-    # ✅ Generate asset map using PATH-BASED generation
+    # ✅ Generate asset map after copying assets
     if gen_assets_py_flag:
         output_path = new_package_dir / "assets.py"
         print(f"[AssetKit DEBUG] Generating Python asset mapping file at {output_path}")
@@ -103,9 +111,10 @@ def create_new_project(args):
         except Exception as e:
             print(f"[AssetKit ERROR] Failed to generate asset mapping file: {e}")
 
-    # 🔥 FIXED THIS LINE — remove ❌ Unicode checkmark
-    print(f"[AssetKit] [OK] Asset package project '{project_name}' created successfully at ./{project_name}/")
+    print(f"[AssetKit] [OK] Asset package project '{project_name}' created successfully at {target_path}")
 
     if install_flag:
         print(f"[AssetKit DEBUG] Installing package using 'pip install .' ...")
-        subprocess.run([sys.executable, "-m", "pip", "install", "."], cwd=target_path)
+        result = subprocess.run([sys.executable, "-m", "pip", "install", "."], cwd=target_path)
+        if result.returncode != 0:
+            print(f"[AssetKit ERROR] Package install failed with code {result.returncode}")
