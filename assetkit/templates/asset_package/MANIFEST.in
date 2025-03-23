@@ -1,3 +1,2 @@
-include your_package_name/assets.py
-recursive-include your_package_name/resources *
-recursive-include your_package_name/resources/assets *
+include {{PROJECT_NAME}}/assets.py
+recursive-include {{PROJECT_NAME}}/resources *
