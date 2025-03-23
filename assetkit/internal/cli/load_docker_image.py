@@ -11,7 +11,7 @@ def load_docker_image_cli(args):
     package = args.package
     asset_key = args.asset
 
-    print(f"[AssetKit] 🔍 Loading Docker image from installed package '{package}' (asset key: '{asset_key}')")
+    print(f"[AssetKit] Loading Docker image from installed package '{package}' (asset key: '{asset_key}')")
 
     # Attempt loading from installed package first
     try:
@@ -36,7 +36,7 @@ def load_docker_image_cli(args):
     tar_path = assets[asset_key].path()
     try:
         subprocess.run(["docker", "load", "-i", tar_path], check=True)
-        print(f"[AssetKit] ✅ Docker image loaded successfully from {tar_path}")
+        print(f"[AssetKit] Docker image loaded successfully from {tar_path}")
     except subprocess.CalledProcessError as e:
         print(f"[AssetKit ERROR] Failed to load Docker image from tar: {e}")
         sys.exit(1)

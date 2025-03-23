@@ -26,7 +26,7 @@ def bundle_docker_image_cli(args):
         temp_dir = tempfile.TemporaryDirectory()
         target_dir = Path(temp_dir.name).resolve()
 
-    print(f"[AssetKit] 🚀 Bundling Docker image '{image_name}' into asset package '{package_name}'")
+    print(f"[AssetKit] Bundling Docker image '{image_name}' into asset package '{package_name}'")
 
     # Step 1: Pull image (if not already present)
     try:
@@ -74,14 +74,14 @@ def bundle_docker_image_cli(args):
                 resource_dir="resources/assets",
                 output_filename=str(assets_py_path)
             )
-            print(f"[AssetKit] ✅ assets.py generated successfully")
+            print(f"[AssetKit] Asset mapping file generated successfully")
         except Exception as e:
             print(f"[AssetKit ERROR] Failed to generate assets.py: {e}")
 
     # Step 5: Optionally install the generated package
     if install:
         install_dir = asset_temp_dir
-        print(f"[AssetKit DEBUG] Installing package from {install_dir}")
+        print(f"[AssetKit] Installing package from {install_dir}")
         result = subprocess.run(
             [sys.executable, "-m", "pip", "install", "."],
             cwd=install_dir,
@@ -91,11 +91,11 @@ def bundle_docker_image_cli(args):
         if result.returncode != 0:
             print(f"[AssetKit ERROR] Failed to install package:\n{result.stderr}")
         else:
-            print(f"[AssetKit] ✅ Package installed successfully from {install_dir}")
+            print(f"[AssetKit] Package installed successfully from {install_dir}")
 
-    # Clean up temp directory if used
+    # Step 6: Clean up temp directory if used
     if temp_dir:
-        print(f"[AssetKit DEBUG] Cleaning up temporary directory: {temp_dir.name}")
+        print(f"[AssetKit] Cleaning up temporary directory: {temp_dir.name}")
         temp_dir.cleanup()
 
 
