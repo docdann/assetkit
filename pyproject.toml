@@ -17,3 +17,6 @@ assetkit = "assetkit.cli:main"
 
 [tool.setuptools.package-data]
 assetkit = ["resources/**/*"]
+
+[tool.setuptools.packages.find]
+include = ["assetkit*"]

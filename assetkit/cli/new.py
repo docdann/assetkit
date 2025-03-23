@@ -5,7 +5,10 @@ import subprocess
 from pathlib import Path
 import sys
 
+from assetkit.internal.generators.generate_asset_map import generate_asset_mapping  # ✅ NEW
+
 TEMPLATE_DIR = Path(__file__).parent.parent / "templates" / "asset_package"
+
 
 def register_new_command(subparsers):
     parser = subparsers.add_parser("new", help="Create a new AssetKit asset package project")
@@ -21,6 +24,11 @@ def register_new_command(subparsers):
         action="store_true",
         help="Install the package after creation using 'pip install .'"
     )
+    parser.add_argument(
+        "--gen-assets-py",
+        action="store_true",
+        help="Generate a reusable Python asset mapping file (assets.py)"
+    )
     parser.set_defaults(func=create_new_project)
 
 
@@ -28,6 +36,7 @@ def create_new_project(args):
     project_name = args.name
     asset_files = args.add
     install_flag = args.install
+    gen_assets_py_flag = getattr(args, "gen_assets_py", False)
 
     target_path = Path.cwd() / project_name
 
@@ -65,11 +74,13 @@ def create_new_project(args):
                 print(f"[AssetKit DEBUG] Skipped binary file: {path}")
                 continue
 
-    # Copy additional assets
-    if asset_files:
-        asset_target_dir = new_package_dir / "resources" / "assets"
-        asset_target_dir.mkdir(parents=True, exist_ok=True)
+    # Copy additional assets BEFORE generating assets.py
+    asset_target_dir = new_package_dir / "resources" / "assets"
+    asset_target_dir.mkdir(parents=True, exist_ok=True)
 
+    copied_assets = []
+
+    if asset_files:
         for path in asset_files:
             src_path = Path(path).resolve()
             if not src_path.exists():
@@ -79,12 +90,27 @@ def create_new_project(args):
             if src_path.is_file():
                 dest_path = asset_target_dir / src_path.name
                 shutil.copy2(src_path, dest_path)
+                copied_assets.append(dest_path)
                 print(f"[AssetKit DEBUG] Added file asset: {src_path} -> {dest_path}")
-
             elif src_path.is_dir():
                 dest_dir = asset_target_dir / src_path.name
                 shutil.copytree(src_path, dest_dir, dirs_exist_ok=True)
+                copied_assets.append(dest_dir)
                 print(f"[AssetKit DEBUG] Added directory asset: {src_path} -> {dest_dir}")
+
+    # ✅ Generate assets.py after assets are copied
+    if gen_assets_py_flag:
+        output_path = new_package_dir / "assets.py"
+        print(f"[AssetKit DEBUG] Generating Python asset mapping file at {output_path}")
+        try:
+            generate_asset_mapping(
+                package_name=project_name,
+                resource_dir="resources/assets",
+                output_filename=output_path
+            )
+            print(f"[AssetKit] Generated assets.py successfully.")
+        except Exception as e:
+            print(f"[AssetKit ERROR] Failed to generate asset mapping file: {e}")
 
     print(f"[AssetKit] Asset package project '{project_name}' created successfully at ./{project_name}/")
 
@@ -92,6 +118,3 @@ def create_new_project(args):
     if install_flag:
         print(f"[AssetKit DEBUG] Installing package using 'pip install .' ...")
         subprocess.run([sys.executable, "-m", "pip", "install", "."], cwd=target_path)
-
-# Optionally, future-proof enhancement could move install into separate install_package(path) function,
-# but your structure is already production-worthy and fully functional.
