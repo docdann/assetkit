@@ -91,11 +91,13 @@ The registry defaults to `~/.assetkit/registry`. Override with the
 `ASSETKIT_REGISTRY` environment variable if desired.
 
 To enable package name tab-completion for `assetkit registry pull`, install the
-optional `argcomplete` dependency and run:
+optional `argcomplete` dependency and add the following to your shell profile:
 
 ```bash
-activate-global-python-argcomplete --user
+eval "$(register-python-argcomplete assetkit)"
 ```
+This configures interactive completion even though the installed `assetkit`
+script lacks the `PYTHON_ARGCOMPLETE_OK` marker.
 
 ---
 
