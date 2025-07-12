@@ -103,10 +103,6 @@ my_assets/
     ├── assets.py              <-- optional, auto-generated
     └── resources/
         └── assets/
-            ├── config/
-            │   └── model.yaml
-            ├── data/
-            │   └── sample.csv
             └── myfile.txt
 ```
 
@@ -120,7 +116,7 @@ from assetkit.asset_manager import AssetManager
 
 assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
 print(assets.list())  # List all available assets
-print(assets["config/model.yaml"].text())  # Read file contents
+print(assets["myfile.txt"].text())  # Read file contents
 ```
 
 ### Auto-importable mapping via `assets.py` (if generated):
@@ -128,8 +124,7 @@ print(assets["config/model.yaml"].text())  # Read file contents
 ```python
 from my_assets.assets import assets
 
-print(assets.config_model_yaml.text())
-print(assets.data_sample_csv.text())
+print(assets.myfile_txt.text())
 print(assets.myfile_txt.path())  # Full file path
 ```
 
@@ -159,7 +154,7 @@ Then test in Python:
 
 ```python
 from my_assets.assets import assets
-print(assets.config_model_yaml.text())
+print(assets.myfile_txt.text())
 ```
 
 Or with raw `AssetManager` if no assets.py:
