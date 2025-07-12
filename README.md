@@ -19,8 +19,9 @@
 - ✅ Optional `--install` after generation  
 - ✅ Optional `--gen-assets-py` to include reusable `assets.py` for import  
 - ✅ Auto-discovery of installed asset packages via `entry_points`  
-- ✅ Fully pip-installable — no source directory needed at runtime  
-- ✅ Supports plain files, binaries, even GitHub repositories  
+- ✅ Fully pip-installable — no source directory needed at runtime
+- ✅ Supports plain files, binaries, even GitHub repositories
+- ✅ Simple local registry for sharing asset packages
 
 ---
 
@@ -77,6 +78,16 @@ assetkit new my_assets --add myfile.txt --gen-assets-py --install
 ```bash
 assetkit scaffold mlkit my_app_project
 ```
+
+### Manage packages via the local registry:
+
+```bash
+assetkit registry push my_assets         # push a directory or .tar.gz archive
+assetkit registry list                  # show stored packages
+assetkit registry pull my_assets --output ./fetched
+```
+The registry defaults to `~/.assetkit/registry`. Override with the
+`ASSETKIT_REGISTRY` environment variable if desired.
 
 ---
 

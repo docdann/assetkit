@@ -13,4 +13,11 @@ Create new asset packages using the CLI:
 assetkit new myplugin        # or `python -m assetkit new myplugin`
 ```
 
+Manage packages in the local registry:
+```
+assetkit registry push myplugin
+assetkit registry list
+assetkit registry pull myplugin --output ./fetched
+```
+
 See `USAGE.md` for a full guide.

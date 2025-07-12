@@ -92,6 +92,14 @@ twine upload dist/*
 
 This allows other users to install your asset package via pip.
 
+Alternatively push the package to the local AssetKit registry:
+
+```bash
+assetkit registry push dist/myplugin-0.1.tar.gz
+assetkit registry list
+assetkit registry pull myplugin --output ./fetched
+```
+
 ---
 
 ## You're ready to go 🎉
