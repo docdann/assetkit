@@ -23,6 +23,7 @@
 - ✅ Supports plain files, binaries, even GitHub repositories
 - ✅ Simple local registry for sharing asset packages
 - ✅ Tab-completion of registry package names when pulling (requires `argcomplete`)
+- ✅ `assetkit completion` command outputs shell setup script
 
 ---
 
@@ -94,10 +95,9 @@ To enable package name tab-completion for `assetkit registry pull`, install the
 optional `argcomplete` dependency and add the following to your shell profile:
 
 ```bash
-eval "$(register-python-argcomplete assetkit)"
+eval "$(register-python-argcomplete assetkit)"  # or `assetkit completion bash`
 ```
-This configures interactive completion even though the installed `assetkit`
-script lacks the `PYTHON_ARGCOMPLETE_OK` marker.
+The `completion` command prints the shell code for enabling tab-completion.
 
 ---
 

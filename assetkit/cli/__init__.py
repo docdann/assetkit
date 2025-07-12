@@ -15,6 +15,7 @@ def main():
     from assetkit.internal.cli.export_package import register_export_package_command
     from assetkit.internal.cli.combine_packages import register_combine_command
     from .registry import register_registry_command
+    from .completion import register_completion_command
 
     parser = argparse.ArgumentParser(prog="assetkit", description="AssetKit CLI")
     subparsers = parser.add_subparsers(dest="command")
@@ -26,6 +27,7 @@ def main():
     register_export_package_command(subparsers)
     register_combine_command(subparsers)
     register_registry_command(subparsers)
+    register_completion_command(subparsers)
 
     if argcomplete:
         argcomplete.autocomplete(parser)

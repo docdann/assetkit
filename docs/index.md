@@ -20,7 +20,7 @@ assetkit registry list
 assetkit registry pull myplugin --output ./fetched
 ```
 
-To enable tab-completion of registry package names, install `argcomplete` and add `eval "$(register-python-argcomplete assetkit)"` to your shell profile.
+To enable tab-completion of registry package names, install `argcomplete` and add `eval "$(register-python-argcomplete assetkit)"` or `assetkit completion bash` to your shell profile.
 
 
 See `USAGE.md` for a full guide.
