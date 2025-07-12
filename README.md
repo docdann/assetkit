@@ -22,6 +22,7 @@
 - ✅ Fully pip-installable — no source directory needed at runtime
 - ✅ Supports plain files, binaries, even GitHub repositories
 - ✅ Simple local registry for sharing asset packages
+- ✅ Tab-completion of registry package names when pulling (requires `argcomplete`)
 
 ---
 

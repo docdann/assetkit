@@ -1,5 +1,10 @@
 import argparse
 
+try:  # optional shell completion via argcomplete
+    import argcomplete  # type: ignore
+except ImportError:  # pragma: no cover - optional dependency
+    argcomplete = None
+
 
 def main():
     from . import new
@@ -20,6 +25,9 @@ def main():
     register_export_package_command(subparsers)
     register_combine_command(subparsers)
     register_registry_command(subparsers)
+
+    if argcomplete:
+        argcomplete.autocomplete(parser)
 
     args = parser.parse_args()
     if hasattr(args, "func"):

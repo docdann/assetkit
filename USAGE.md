@@ -100,6 +100,9 @@ assetkit registry list
 assetkit registry pull myplugin --output ./fetched
 ```
 
+Install `argcomplete` and run `activate-global-python-argcomplete --user` to
+tab-complete package names when using `assetkit registry pull`.
+
 ---
 
 ## You're ready to go 🎉

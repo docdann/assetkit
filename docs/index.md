@@ -20,4 +20,7 @@ assetkit registry list
 assetkit registry pull myplugin --output ./fetched
 ```
 
+To enable tab-completion of registry package names, install `argcomplete` and run `activate-global-python-argcomplete --user`.
+
+
 See `USAGE.md` for a full guide.
