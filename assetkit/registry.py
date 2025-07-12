@@ -57,4 +57,10 @@ def pull_package(name: str, output_dir: Path) -> Path:
 def list_packages() -> list:
     """List package archives stored in the registry (base names)."""
     registry = get_registry_path()
-    return sorted(p.stem for p in registry.glob("*.tar.gz"))
+    names = []
+    for p in registry.glob("*.tar.gz"):
+        name = p.name
+        if name.endswith(".tar.gz"):
+            name = name[:-7]
+        names.append(name)
+    return sorted(names)

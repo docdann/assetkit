@@ -90,6 +90,13 @@ assetkit registry pull my_assets --output ./fetched
 The registry defaults to `~/.assetkit/registry`. Override with the
 `ASSETKIT_REGISTRY` environment variable if desired.
 
+To enable package name tab-completion for `assetkit registry pull`, install the
+optional `argcomplete` dependency and run:
+
+```bash
+activate-global-python-argcomplete --user
+```
+
 ---
 
 ## 📂 Example Asset Package Structure
