@@ -12,8 +12,9 @@ authors = [{name = "docdann", email = "docdann@proton.me"}]
 requires-python = ">=3.8"
 dependencies = []
 
-[project.scripts]
-assetkit = "assetkit.cli:main"
+
+[tool.setuptools]
+script-files = ["bin/assetkit"]
 
 [tool.setuptools.package-data]
 assetkit = ["resources/**/*"]
