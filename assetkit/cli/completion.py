@@ -25,4 +25,5 @@ def register_completion_command(subparsers: argparse._SubParsersAction) -> None:
 def _completion_command(args: argparse.Namespace) -> None:
     if not argcomplete:
         raise SystemExit("argcomplete is not installed")
-    print(argcomplete.shellcode("assetkit", shell=args.shell))
+    # argcomplete.shellcode expects a list of executables
+    print(argcomplete.shellcode(["assetkit"], shell=args.shell))
