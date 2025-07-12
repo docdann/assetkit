@@ -8,9 +8,9 @@ Install AssetKit via pip:
 pip install assetkit
 ```
 
-Create new asset packages:
+Create new asset packages using the CLI:
 ```
-assetkit new myplugin
+assetkit new myplugin        # or `python -m assetkit new myplugin`
 ```
 
 See `USAGE.md` for a full guide.

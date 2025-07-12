@@ -15,7 +15,8 @@ pip install -e .
 ---
 
 ## ✅ Step 2: Scaffold a New Asset Package
-Use the CLI to generate a new package:
+Use the CLI to generate a new package (either via the `assetkit` command
+or `python -m assetkit`):
 
 ```bash
 assetkit new myplugin

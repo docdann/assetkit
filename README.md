@@ -39,6 +39,9 @@ pip install -e .
 
 ## 🛠 CLI Usage
 
+Run the command `assetkit` from your shell. The same interface is
+available with `python -m assetkit` which invokes the package directly.
+
 ### Create a new asset package:
 
 ```bash
