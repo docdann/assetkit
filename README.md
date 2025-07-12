@@ -92,7 +92,8 @@ The registry defaults to `~/.assetkit/registry`. Override with the
 `ASSETKIT_REGISTRY` environment variable if desired.
 
 To enable package name tab-completion for `assetkit registry pull`, install the
-optional `argcomplete` dependency and add the following to your shell profile:
+optional `argcomplete` dependency and either run `activate-global-python-argcomplete --user`
+or add the following to your shell profile:
 
 ```bash
 eval "$(register-python-argcomplete assetkit)"  # or `assetkit completion bash`
@@ -113,7 +114,7 @@ my_assets/
     ├── assets.py              <-- optional, auto-generated
     └── resources/
         └── assets/
-            └── myfile.txt
+            # add your asset files here
 ```
 
 ---
@@ -124,6 +125,7 @@ my_assets/
 ```python
 from assetkit.asset_manager import AssetManager
 
+# assume you added a file 'myfile.txt' under resources/assets/
 assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
 print(assets.list())  # List all available assets
 print(assets["myfile.txt"].text())  # Read file contents
@@ -134,7 +136,7 @@ print(assets["myfile.txt"].text())  # Read file contents
 ```python
 from my_assets.assets import assets
 
-print(assets.myfile_txt.text())
+print(assets.myfile_txt.text())  # from 'myfile.txt'
 print(assets.myfile_txt.path())  # Full file path
 ```
 
@@ -164,7 +166,7 @@ Then test in Python:
 
 ```python
 from my_assets.assets import assets
-print(assets.myfile_txt.text())
+print(assets.myfile_txt.text())  # assuming myfile.txt exists
 ```
 
 Or with raw `AssetManager` if no assets.py:
