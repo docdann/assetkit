@@ -19,8 +19,11 @@
 - ✅ Optional `--install` after generation  
 - ✅ Optional `--gen-assets-py` to include reusable `assets.py` for import  
 - ✅ Auto-discovery of installed asset packages via `entry_points`  
-- ✅ Fully pip-installable — no source directory needed at runtime  
-- ✅ Supports plain files, binaries, even GitHub repositories  
+- ✅ Fully pip-installable — no source directory needed at runtime
+- ✅ Supports plain files, binaries, even GitHub repositories
+- ✅ Simple local registry for sharing asset packages
+- ✅ Tab-completion of registry package names when pulling (requires `argcomplete`)
+- ✅ `assetkit completion` command outputs shell setup script
 
 ---
 
@@ -38,6 +41,9 @@ pip install -e .
 ---
 
 ## 🛠 CLI Usage
+
+Run the command `assetkit` from your shell. The same interface is
+available with `python -m assetkit` which invokes the package directly.
 
 ### Create a new asset package:
 
@@ -75,6 +81,24 @@ assetkit new my_assets --add myfile.txt --gen-assets-py --install
 assetkit scaffold mlkit my_app_project
 ```
 
+### Manage packages via the local registry:
+
+```bash
+assetkit registry push my_assets         # push a directory or .tar.gz archive
+assetkit registry list                  # show stored packages
+assetkit registry pull my_assets --output ./fetched
+```
+The registry defaults to `~/.assetkit/registry`. Override with the
+`ASSETKIT_REGISTRY` environment variable if desired.
+
+To enable package name tab-completion for `assetkit registry pull`, install the
+optional `argcomplete` dependency and add the following to your shell profile:
+
+```bash
+eval "$(register-python-argcomplete assetkit)"  # or `assetkit completion bash`
+```
+The `completion` command prints the shell code for enabling tab-completion.
+
 ---
 
 ## 📂 Example Asset Package Structure
@@ -89,11 +113,7 @@ my_assets/
     ├── assets.py              <-- optional, auto-generated
     └── resources/
         └── assets/
-            ├── config/
-            │   └── model.yaml
-            ├── data/
-            │   └── sample.csv
-            └── myfile.txt
+            # add your asset files here
 ```
 
 ---
@@ -104,9 +124,10 @@ my_assets/
 ```python
 from assetkit.asset_manager import AssetManager
 
+# assume you added a file 'myfile.txt' under resources/assets/
 assets = AssetManager(package_root="my_assets", resource_dir="resources/assets")
 print(assets.list())  # List all available assets
-print(assets["config/model.yaml"].text())  # Read file contents
+print(assets["myfile.txt"].text())  # Read file contents
 ```
 
 ### Auto-importable mapping via `assets.py` (if generated):
@@ -114,8 +135,7 @@ print(assets["config/model.yaml"].text())  # Read file contents
 ```python
 from my_assets.assets import assets
 
-print(assets.config_model_yaml.text())
-print(assets.data_sample_csv.text())
+print(assets.myfile_txt.text())  # from 'myfile.txt'
 print(assets.myfile_txt.path())  # Full file path
 ```
 
@@ -145,7 +165,7 @@ Then test in Python:
 
 ```python
 from my_assets.assets import assets
-print(assets.config_model_yaml.text())
+print(assets.myfile_txt.text())  # assuming myfile.txt exists
 ```
 
 Or with raw `AssetManager` if no assets.py:
@@ -156,6 +176,16 @@ print(assets.list())
 ```
 
 ---
+
+## 👷 Development Workflow
+
+A small `Makefile` is included to simplify common tasks:
+
+```bash
+make install  # install the package in editable mode
+make test     # run the test suite
+make package  # build a distribution under `dist/`
+```
 
 ## 🐳 Dockerized Example (Optional)
 

@@ -8,9 +8,19 @@ Install AssetKit via pip:
 pip install assetkit
 ```
 
-Create new asset packages:
+Create new asset packages using the CLI:
 ```
-assetkit new myplugin
+assetkit new myplugin        # or `python -m assetkit new myplugin`
 ```
+
+Manage packages in the local registry:
+```
+assetkit registry push myplugin
+assetkit registry list
+assetkit registry pull myplugin --output ./fetched
+```
+
+To enable tab-completion of registry package names, install `argcomplete` and add `eval "$(register-python-argcomplete assetkit)"` (or `assetkit completion bash`) to your shell profile.
+
 
 See `USAGE.md` for a full guide.

@@ -15,7 +15,8 @@ pip install -e .
 ---
 
 ## ✅ Step 2: Scaffold a New Asset Package
-Use the CLI to generate a new package:
+Use the CLI to generate a new package (either via the `assetkit` command
+or `python -m assetkit`):
 
 ```bash
 assetkit new myplugin
@@ -90,6 +91,16 @@ twine upload dist/*
 ```
 
 This allows other users to install your asset package via pip.
+
+Alternatively push the package to the local AssetKit registry:
+
+```bash
+assetkit registry push dist/myplugin-0.1.tar.gz
+assetkit registry list
+assetkit registry pull myplugin --output ./fetched
+```
+
+Install `argcomplete` and add `eval "$(register-python-argcomplete assetkit)"` (or `assetkit completion bash`) to your shell profile to tab-complete package names when using `assetkit registry pull`.
 
 ---
 
