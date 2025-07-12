@@ -157,6 +157,16 @@ print(assets.list())
 
 ---
 
+## 👷 Development Workflow
+
+A small `Makefile` is included to simplify common tasks:
+
+```bash
+make install  # install the package in editable mode
+make test     # run the test suite
+make package  # build a distribution under `dist/`
+```
+
 ## 🐳 Dockerized Example (Optional)
 
 ```dockerfile
